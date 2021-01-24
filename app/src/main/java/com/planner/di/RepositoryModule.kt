@@ -2,6 +2,7 @@ package com.planner.di
 
 import com.planner.repository.PlansRepository
 import com.planner.repository.PlansRepositoryImpl
+import com.planner.room.DayPlansDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +15,11 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun providePlansRepository(): PlansRepository{
-        return PlansRepositoryImpl()
+    fun providePlansRepository(
+        dayPlansDao: DayPlansDao,
+    ): PlansRepository {
+        return PlansRepositoryImpl(
+            dayPlansDao = dayPlansDao,
+        )
     }
 }
