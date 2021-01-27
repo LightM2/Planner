@@ -4,6 +4,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import com.planner.ui.theme.shapes
 
 private val DarkColorPalette = darkColors(
@@ -29,7 +30,7 @@ private val LightColorPalette = lightColors(
     primaryVariant = primaryColor,
     secondary = secondaryLightColor,
     secondaryVariant = secondaryColor,
-    onPrimary = primaryTextColor,
+    onPrimary = Color.White,
     onSecondary = secondaryTextColor
 
     /* Other default colors to override

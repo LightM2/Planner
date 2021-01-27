@@ -9,9 +9,9 @@ data class DayPlans (
     @ColumnInfo(name = "year")
     val year: Int? = null,
     @ColumnInfo(name = "month")
-    val month: Int? = null,
+    val month: Int? = null, //January = 0
     @ColumnInfo(name = "dayOfWeek")
-    val dayOfWeek: Int? = null,
+    val dayOfWeek: Int? = null,  //Sunday = 1
     @ColumnInfo(name = "day")
     val day: Int? = null,
 
