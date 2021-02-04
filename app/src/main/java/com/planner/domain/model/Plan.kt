@@ -1,4 +1,4 @@
-package com.planner.room.model
+package com.planner.domain.model
 
 
 data class Plan (

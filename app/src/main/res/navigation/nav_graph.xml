@@ -7,5 +7,13 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.planner.ui.main.MainFragment"
-        android:label="MainFragment" />
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_dayInformationFragment"
+            app:destination="@id/dayInformationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dayInformationFragment"
+        android:name="com.planner.ui.dayInformation.DayInformationFragment"
+        android:label="DayInformationFragment" />
 </navigation>

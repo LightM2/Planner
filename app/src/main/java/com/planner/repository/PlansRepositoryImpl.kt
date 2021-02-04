@@ -1,15 +1,17 @@
 package com.planner.repository
 
 import android.util.Log
+import com.planner.domain.model.DayPlans
 import com.planner.room.DayPlansDao
-import com.planner.room.model.DayPlans
+import com.planner.room.model.DayPlansMapperEntity
 
 class PlansRepositoryImpl(
-    private val dayPlansDao: DayPlansDao
+    private val dayPlansDao: DayPlansDao,
+    private val dayPlansMapperEntity: DayPlansMapperEntity
 ) : PlansRepository {
     override suspend fun setNewDayPlansInDB(dayPlans: DayPlans) {
         try {
-            dayPlansDao.insert(dayPlans)
+            dayPlansDao.insert(dayPlansMapperEntity.mapFromDomainModel(dayPlans))
             Log.d("Room setNewDayPlansInDB", "Success")
 
         } catch (e: Exception) {
@@ -21,7 +23,7 @@ class PlansRepositoryImpl(
     override suspend fun getAllDaysPlansFromDB(): List<DayPlans>? {
         var result: List<DayPlans>? = null
         try {
-            result = dayPlansDao.get()
+            result = dayPlansMapperEntity.toDomainList(dayPlansDao.get())
             Log.d("Room getAllDaysPlansFromDB", "Success")
 
         } catch (e: Exception) {
@@ -30,28 +32,10 @@ class PlansRepositoryImpl(
         return result
     }
 
-    /*override suspend fun getSpecialDayPlansFromDB(
-        year: Int,
-        month: Int,
-        dayOfWeek: Int,
-        day: Int
-    ): List<DayPlans>? {
-        var result: List<DayPlans>? = null
-        try {
-            result = dayPlansEntityMapper.toDomainList(
-                dayPlansDao.getSpecialDayPlans(year, month, dayOfWeek, day)
-            )
-            Log.d("Room getSpecialDayPlansFromDB", "Success")
-
-        } catch (e: Exception) {
-            Log.d("Room getSpecialDayPlansFromDB", "Exception $e")
-        }
-        return result
-    }*/
 
     override suspend fun updateDayPlansInDB(dayPlans: DayPlans) {
         try {
-            dayPlansDao.updateDrinkCategories(dayPlans)
+            dayPlansDao.updateDrinkCategories(dayPlansMapperEntity.mapFromDomainModel(dayPlans))
             Log.d("Room updateDayPlansInDB", "Success")
 
         } catch (e: Exception) {
@@ -61,7 +45,7 @@ class PlansRepositoryImpl(
 
     override suspend fun deleteDayPlansFromDB(dayPlans: DayPlans) {
         try {
-            dayPlansDao.delete(dayPlans)
+            dayPlansDao.delete(dayPlansMapperEntity.mapFromDomainModel(dayPlans))
             Log.d("Room deleteDayPlansFromDB", "Success")
 
         } catch (e: Exception) {

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.planner.room.DayPlansDao
 import com.planner.room.DayPlansDatabase
+import com.planner.room.model.DayPlansMapperEntity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,6 +32,12 @@ object RoomModule {
     @Provides
     fun provideDrinkCategoriesDao(dayPlansDatabase: DayPlansDatabase): DayPlansDao {
         return dayPlansDatabase.dayPlansDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providePlansMapper(): DayPlansMapperEntity {
+        return DayPlansMapperEntity()
     }
 
 

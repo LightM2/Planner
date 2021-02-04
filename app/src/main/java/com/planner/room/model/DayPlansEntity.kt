@@ -3,18 +3,17 @@ package com.planner.room.model
 import androidx.room.*
 
 @Entity(tableName = "dayPlansTN")
-data class DayPlans (
+data class DayPlansEntity (
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = "year")
-    val year: Int? = null,
+    val year: Int = 0,
     @ColumnInfo(name = "month")
-    val month: Int? = null, //January = 0
+    val month: Int = 0, //January = 0
     @ColumnInfo(name = "dayOfWeek")
-    val dayOfWeek: Int? = null,  //Sunday = 1
+    val dayOfWeek: Int = 0,  //Sunday = 1
     @ColumnInfo(name = "day")
-    val day: Int? = null,
-
-    @TypeConverters(ListOfPlansTypeConverter::class)
-    var plans: MutableList<Plan>? = null
+    val day: Int = 0,
+    @ColumnInfo(name = "plans")
+    var plans: String? = null
 )
