@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -23,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment: Fragment() {
+class MainFragment : Fragment() {
 
     @Inject
     lateinit var application: BaseApplication
@@ -39,32 +40,41 @@ class MainFragment: Fragment() {
     ): View {
 
 
-
-        return ComposeView(requireContext()).apply{
+        return ComposeView(requireContext()).apply {
             setContent {
                 PlannerTheme {
 
-                    LazyRow(){
+                    LazyRow() {
                         itemsIndexed(
                             items = viewModel.weeksList.value
-                        ){i, item ->
+                        ) { i, item ->
                             viewModel.onChangeWeeksScrollPosition(i)
                             Log.d(TAG, "WeeksScrollPosition $i")
-                            if ((i + 1) >= viewModel.caunter){
+                            if ((i + 1) >= viewModel.counter) {
                                 viewModel.nextWeek()
                             }
-                            LazyColumn(modifier = Modifier.width(365.dp)){
+                            LazyColumn(modifier = Modifier.width(365.dp)) {
                                 itemsIndexed(
                                     items = item
-                                ){index, dayInformation ->
+                                ) { index, dayPlans ->
                                     MainDayCard(
-                                        month = dayInformation.getMonthName(),
-                                        dayOfWeek = dayInformation.getDayOfWeekName(),
-                                        day = dayInformation.day,
+                                        month = dayPlans.getMonthName(),
+                                        dayOfWeek = dayPlans.getDayOfWeekName(),
+                                        day = dayPlans.day,
                                         numberOfDonePlans = 0,
                                         numberOfPlans = 7,
+                                        isToday = dayPlans.isSameDay(viewModel.today),
                                         onClick = {
-                                            findNavController().navigate(R.id.action_mainFragment_to_dayInformationFragment)
+                                            val bundle = bundleOf(
+                                                Pair("year", dayPlans.year),
+                                                Pair("month", dayPlans.month),
+                                                Pair("monthName", dayPlans.getMonthName()),
+                                                Pair("day", dayPlans.day)
+                                            )
+                                            findNavController().navigate(
+                                                R.id.action_mainFragment_to_dayInformationFragment,
+                                                bundle
+                                            )
                                         })
 
                                 }

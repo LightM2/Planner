@@ -30,7 +30,9 @@ constructor(
     private var dayOfWeek: Int = 0
     private var dayOfWeekName: String = ""
     private var day: Int = 0
-    var caunter = 0
+
+    lateinit var today: DayPlans
+    var counter = 0
 
     var currentDayPlans: DayPlans = DayPlans(0, 0, 0, 0)
 
@@ -41,14 +43,14 @@ constructor(
 
 
     init {
-        getCurrentDate()
+        getToday()
     }
 
-    fun  onChangeWeeksScrollPosition(position: Int){
+    fun onChangeWeeksScrollPosition(position: Int) {
         weeksListScrollPosition = position
     }
 
-    private fun appendWeeksList(weekList: List<DayPlans>){
+    private fun appendWeeksList(weekList: List<DayPlans>) {
         val current = ArrayList(weeksList.value)
         //current.remove(current[0])
         current.add(weekList)
@@ -56,13 +58,13 @@ constructor(
 
     }
 
-    fun nextWeek(){
+    fun nextWeek() {
         viewModelScope.launch {
             loading.value = true
-            if ((weeksListScrollPosition + 1) >= caunter){
+            if ((weeksListScrollPosition + 1) >= counter) {
                 val result = currentDayPlans.getNextWeekList()
                 currentDayPlans = currentDayPlans.getSomeDay(7)
-                caunter++
+                counter++
                 appendWeeksList(result)
                 onChangeWeeksScrollPosition(0)
             }
@@ -70,31 +72,30 @@ constructor(
         }
     }
 
+    private fun getToday() {
+        viewModelScope.launch {
+            val rightNow = Calendar.getInstance()
+            Log.d(TAG, "rightNow - ${rightNow.time}")
 
-    fun getCurrentDate() {
-        val rightNow = Calendar.getInstance()
-        Log.d(TAG, "rightNow - ${rightNow.time}")
+            year = rightNow.get(Calendar.YEAR)
+            month = rightNow.get(Calendar.MONTH)
+            dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK)
+            day = rightNow.get(Calendar.DAY_OF_MONTH)
+            monthName = DateFormatSymbols().months[month]
+            dayOfWeekName = DateFormatSymbols().weekdays[dayOfWeek]
 
-        year = rightNow.get(Calendar.YEAR)
-        month = rightNow.get(Calendar.MONTH)
-        dayOfWeek = rightNow.get(Calendar.DAY_OF_WEEK)
-        day = rightNow.get(Calendar.DAY_OF_MONTH)
-        monthName = DateFormatSymbols().months[month]
-        dayOfWeekName = DateFormatSymbols().weekdays[dayOfWeek]
+            currentDayPlans = DayPlans(year, month, dayOfWeek, day)
+            today = DayPlans(year, month, dayOfWeek, day)
+            counter++
 
-        currentDayPlans = DayPlans(year, month, dayOfWeek, day)
-        caunter++
+            weeksList.value = listOf(
+                currentDayPlans.getThisWeekList(),
+            )
 
-        weeksList.value = listOf(
-            //currentDayInformation.getPreviousWeekList(),
-            currentDayPlans.getThisWeekList(),
-            //currentDayInformation.getNextWeekList()
-        )
-
-        Log.d(TAG, "year - $year, month - $month, day of week - $dayOfWeek, day - $day")
-        Log.d(
-            TAG, "year - $year, month - $monthName, day of week - $dayOfWeekName, day - $day"
-        )
+            Log.d(
+                TAG, "year - $year, month - $monthName, day of week - $dayOfWeekName, day - $day"
+            )
+        }
 
     }
 

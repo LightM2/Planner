@@ -15,5 +15,13 @@
     <fragment
         android:id="@+id/dayInformationFragment"
         android:name="com.planner.ui.dayInformation.DayInformationFragment"
-        android:label="DayInformationFragment" />
+        android:label="DayInformationFragment" >
+        <action
+            android:id="@+id/action_dayInformationFragment_to_addNewPlanFragment"
+            app:destination="@id/addNewPlanFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewPlanFragment"
+        android:name="com.planner.ui.addNewPlan.AddNewPlanFragment"
+        android:label="AddNewPlanFragment" />
 </navigation>

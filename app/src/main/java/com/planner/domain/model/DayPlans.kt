@@ -10,9 +10,9 @@ data class DayPlans(
     val month: Int, //January = 0
     val dayOfWeek: Int,  //Sunday = 1
     val day: Int,
-    val id:Int = 0,
+    val id: Int = 0,
     var plans: MutableList<Plan>? = null
-){
+) {
     fun getMonthName(): String = DateFormatSymbols().months[month]
 
     fun getDayOfWeekName(): String = DateFormatSymbols().weekdays[dayOfWeek]
@@ -31,16 +31,18 @@ data class DayPlans(
                     "day of week - ${rightNow.get(Calendar.DAY_OF_WEEK)}, " +
                     "day - ${rightNow.get(Calendar.DAY_OF_MONTH)}"
         )
-        return DayPlans(rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH),
-            rightNow.get(Calendar.DAY_OF_WEEK), rightNow.get(Calendar.DAY_OF_MONTH))
+        return DayPlans(
+            rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH),
+            rightNow.get(Calendar.DAY_OF_WEEK), rightNow.get(Calendar.DAY_OF_MONTH)
+        )
     }
 
-    fun getPreviousWeekList(): MutableList<DayPlans>{
+    fun getPreviousWeekList(): MutableList<DayPlans> {
         val previousDayOfThisWeekDay = getSomeDay(-7)
         return previousDayOfThisWeekDay.getThisWeekList()
     }
 
-    fun getNextWeekList(): MutableList<DayPlans>{
+    fun getNextWeekList(): MutableList<DayPlans> {
         val nextDayOfThisWeekDay = getSomeDay(7)
         return nextDayOfThisWeekDay.getThisWeekList()
     }
@@ -66,8 +68,8 @@ data class DayPlans(
                 for (i in (dayOfWeek - 2) downTo 0) {
                     weekList.add(0, weekList[0].getPreviousDay())
                 }
-                for (j in dayOfWeek..6){
-                    weekList.add(weekList[j-1].getNextDay())
+                for (j in dayOfWeek..6) {
+                    weekList.add(weekList[j - 1].getNextDay())
                 }
 
             }
@@ -78,11 +80,15 @@ data class DayPlans(
         return weekList
     }
 
-    fun countDonePlanes(): Int{
+    fun countDonePlanes(): Int {
         var donePlans: Int = 0
-        if (plans != null){
+        if (plans != null) {
             donePlans = plans!!.count { it.done }
         }
         return donePlans
     }
+
+    fun isSameDay(dayPlans: DayPlans): Boolean =
+        dayPlans.day == day && dayPlans.month == month && dayPlans.year == year
+
 }
