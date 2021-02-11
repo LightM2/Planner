@@ -69,6 +69,7 @@ class MainFragment : Fragment() {
                                                 Pair("year", dayPlans.year),
                                                 Pair("month", dayPlans.month),
                                                 Pair("monthName", dayPlans.getMonthName()),
+                                                Pair("dayOfWeek", dayPlans.dayOfWeek),
                                                 Pair("day", dayPlans.day)
                                             )
                                             findNavController().navigate(

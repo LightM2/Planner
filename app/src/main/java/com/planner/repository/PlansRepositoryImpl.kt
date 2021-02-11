@@ -35,7 +35,7 @@ class PlansRepositoryImpl(
 
     override suspend fun updateDayPlansInDB(dayPlans: DayPlans) {
         try {
-            dayPlansDao.updateDrinkCategories(dayPlansMapperEntity.mapFromDomainModel(dayPlans))
+            dayPlansDao.updateDayPlans(dayPlansMapperEntity.mapFromDomainModel(dayPlans))
             Log.d("Room updateDayPlansInDB", "Success")
 
         } catch (e: Exception) {
@@ -51,6 +51,31 @@ class PlansRepositoryImpl(
         } catch (e: Exception) {
             Log.d("Room deleteDayPlansFromDB", "Exception $e")
         }
+    }
+
+    override suspend fun getSpecialDayPlansFromDB(
+        yearSecond: Int,
+        monthSecond: Int,
+        daySecond: Int
+    ): List<DayPlans>? {
+        var result: List<DayPlans>? = null
+        try {
+            val listOfDayPlans = dayPlansMapperEntity.toDomainList(
+                dayPlansDao.getSpecialDayPlans(
+                    yearSecond,
+                    monthSecond,
+                    daySecond
+                )
+            )
+            if (listOfDayPlans.isNotEmpty()){
+                result = listOfDayPlans
+            }
+            Log.d("Room getSpecialDayPlansFromDB", "Success")
+
+        } catch (e: Exception) {
+            Log.d("Room getSpecialDayPlansFromDB", "Exception $e")
+        }
+        return result
     }
 
 }

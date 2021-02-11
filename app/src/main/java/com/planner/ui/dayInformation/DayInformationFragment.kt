@@ -42,6 +42,7 @@ class DayInformationFragment : Fragment() {
         val year = arguments?.getInt("year")
         val month = arguments?.getInt("month")
         val monthName = arguments?.getString("monthName")
+        val dayOfWeek = arguments?.getInt("dayOfWeek")
         val day = arguments?.getInt("day")
 
 
@@ -75,8 +76,15 @@ class DayInformationFragment : Fragment() {
 
                             IconButton(
                                 onClick = {
+                                    val bundle = bundleOf(
+                                        Pair("year", year),
+                                        Pair("month", month),
+                                        Pair("dayOfWeek", dayOfWeek),
+                                        Pair("day", day)
+                                    )
                                     findNavController().navigate(
                                         R.id.action_dayInformationFragment_to_addNewPlanFragment,
+                                        bundle
                                     )
                                 },
                                 modifier = Modifier

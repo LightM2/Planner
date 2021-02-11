@@ -38,7 +38,7 @@ class DayPlansMapperEntity : DomainMapper<DayPlansEntity, DayPlans> {
     private fun planToString(listOfPlans: MutableList<Plan>?): String? {
         var resultString: String? = null
         if (listOfPlans != null){
-            resultString = listOfPlans.map { "${it.newPlan} - ${it.done}" }.joinToString { "; " }
+            resultString = listOfPlans.map { "${it.newPlan} - ${it.done}" }.joinToString(separator = "; ")//.joinToString { "; " }
         }
         return resultString
     }

@@ -44,9 +44,11 @@ class AddNewPlanFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val year = arguments?.getInt("year")
-        val month = arguments?.getInt("month")
-        val day = arguments?.getInt("day")
+
+        arguments?.getInt("year")?.let { viewModel.year = it }
+        arguments?.getInt("month")?.let { viewModel.month = it }
+        arguments?.getInt("dayOfWeek")?.let { viewModel.dayOfWeek = it }
+        arguments?.getInt("day")?.let { viewModel.day = it }
 
 
 
@@ -63,7 +65,7 @@ class AddNewPlanFragment : Fragment() {
                     ) {
                         Row {
                             IconButton(
-                                onClick = { findNavController().popBackStack()},
+                                onClick = { findNavController().popBackStack() },
                                 modifier = Modifier
                                     .align(Alignment.CenterVertically)
                             ) {
@@ -71,7 +73,9 @@ class AddNewPlanFragment : Fragment() {
                             }
 
                             IconButton(
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    viewModel.setNewPlans()
+                                },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .wrapContentWidth(Alignment.End)
@@ -85,7 +89,7 @@ class AddNewPlanFragment : Fragment() {
 
                         TextField(
                             value = viewModel.newPlan.value,
-                            onValueChange = { viewModel.onTextChanged(it)},
+                            onValueChange = { viewModel.onTextChanged(it) },
                             modifier = Modifier.fillMaxWidth(),
                             label = {
                                 Text(text = "New Plan")
@@ -104,12 +108,12 @@ class AddNewPlanFragment : Fragment() {
 
                         )
 
-                        IconButton(
-                            onClick = { /*TODO*/ },
+                        /*IconButton(
+                            onClick = { *//*TODO*//* },
                         ) {
 
                             Icon(Icons.Filled.Repeat, contentDescription = "Repeat Icon")
-                        }
+                        }*/
                     }
 
                 }

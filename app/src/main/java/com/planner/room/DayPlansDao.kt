@@ -12,11 +12,15 @@ interface DayPlansDao {
     @Query("SELECT * FROM dayPlansTN")
     suspend fun get(): List<DayPlansEntity>
 
-    /*@Query("SELECT * FROM dayPlansEntityTN WHERE year = year AND month = month AND dayOfWeek = dayOfWeek AND day = day")
-    suspend fun getSpecialDayPlans(year: Int, month: Int, dayOfWeek: Int, day: Int): List<DayPlansEntity>*/
+    @Query("SELECT * FROM dayPlansTN WHERE year = :yearSecond AND month = :monthSecond AND day = :daySecond")
+    suspend fun getSpecialDayPlans(
+        yearSecond: Int,
+        monthSecond: Int,
+        daySecond: Int
+    ): List<DayPlansEntity>
 
     @Update
-    suspend fun updateDrinkCategories(dayPlansEntity: DayPlansEntity)
+    suspend fun updateDayPlans(dayPlansEntity: DayPlansEntity)
 
     @Delete
     suspend fun delete(dayPlansEntity: DayPlansEntity)

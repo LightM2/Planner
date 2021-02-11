@@ -10,7 +10,7 @@ import javax.inject.Inject
 class DayInformationViewModel
 @Inject
 constructor(
-    private val recipeRepository: PlansRepository,
+    private val dayPlansRepository: PlansRepository,
     private val state: SavedStateHandle,
 ) : ViewModel(){
     private val TAG: String = "DayInformationViewModel"

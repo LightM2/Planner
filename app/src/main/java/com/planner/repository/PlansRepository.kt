@@ -10,4 +10,6 @@ interface PlansRepository {
     suspend fun updateDayPlansInDB(dayPlans: DayPlans)
 
     suspend fun deleteDayPlansFromDB(dayPlans: DayPlans)
+
+    suspend fun getSpecialDayPlansFromDB(yearSecond: Int, monthSecond: Int, daySecond: Int): List<DayPlans>?
 }
