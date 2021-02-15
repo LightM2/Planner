@@ -80,7 +80,13 @@ data class DayPlans(
         return weekList
     }
 
-    fun countDonePlanes(): Int {
+    fun countPlans(): Int{
+        var result = 0
+        plans?.let { result = it.size }
+        return result
+    }
+
+    fun countDonePlans(): Int {
         var donePlans: Int = 0
         if (plans != null) {
             donePlans = plans!!.count { it.done }
@@ -90,5 +96,9 @@ data class DayPlans(
 
     fun isSameDay(dayPlans: DayPlans): Boolean =
         dayPlans.day == day && dayPlans.month == month && dayPlans.year == year
+
+    fun updateDayPlan(dayPlans: DayPlans){
+        plans = dayPlans.plans
+    }
 
 }

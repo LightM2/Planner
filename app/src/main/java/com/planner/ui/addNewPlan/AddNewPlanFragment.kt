@@ -6,23 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.planner.R
 import com.planner.ui.BaseApplication
 import com.planner.ui.theme.PlannerTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,29 +86,13 @@ class AddNewPlanFragment : Fragment() {
                             value = viewModel.newPlan.value,
                             onValueChange = { viewModel.onTextChanged(it) },
                             modifier = Modifier.fillMaxWidth(),
+                            textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                             label = {
                                 Text(text = "New Plan")
                             },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Done,
-                            ),
-                            onImeActionPerformed = { action, softKeyboardController ->
-                                if (action == ImeAction.Done) {
-                                    softKeyboardController?.hideSoftwareKeyboard()
-                                }
-                            },
-                            textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                             backgroundColor = MaterialTheme.colors.surface
-
                         )
 
-                        /*IconButton(
-                            onClick = { *//*TODO*//* },
-                        ) {
-
-                            Icon(Icons.Filled.Repeat, contentDescription = "Repeat Icon")
-                        }*/
                     }
 
                 }

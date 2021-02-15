@@ -6,10 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.AddTask
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -39,12 +43,12 @@ class DayInformationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val year = arguments?.getInt("year")
-        val month = arguments?.getInt("month")
         val monthName = arguments?.getString("monthName")
-        val dayOfWeek = arguments?.getInt("dayOfWeek")
-        val day = arguments?.getInt("day")
 
+        arguments?.getInt("year")?.let { viewModel.year = it }
+        arguments?.getInt("month")?.let { viewModel.month = it }
+        arguments?.getInt("dayOfWeek")?.let { viewModel.dayOfWeek = it }
+        arguments?.getInt("day")?.let { viewModel.day = it }
 
 
         return ComposeView(requireContext()).apply {
@@ -70,17 +74,17 @@ class DayInformationFragment : Fragment() {
                             Text(
                                 modifier = Modifier
                                     .align(Alignment.CenterVertically),
-                                text = "$day",
+                                text = "${viewModel.day}",
                                 style = MaterialTheme.typography.h4
                             )
 
                             IconButton(
                                 onClick = {
                                     val bundle = bundleOf(
-                                        Pair("year", year),
-                                        Pair("month", month),
-                                        Pair("dayOfWeek", dayOfWeek),
-                                        Pair("day", day)
+                                        Pair("year", viewModel.year),
+                                        Pair("month", viewModel.month),
+                                        Pair("dayOfWeek", viewModel.dayOfWeek),
+                                        Pair("day", viewModel.day)
                                     )
                                     findNavController().navigate(
                                         R.id.action_dayInformationFragment_to_addNewPlanFragment,
@@ -100,6 +104,38 @@ class DayInformationFragment : Fragment() {
                                 )
                             }
 
+                        }
+                        viewModel.getDayPlansList()
+
+                        if (viewModel.dayPlansLastIsNotEmpty.value) {
+                            LazyColumn() {
+                                itemsIndexed(
+                                    items = viewModel.planList.value
+                                ) { i, plan ->
+                                    val isCheck = remember { mutableStateOf(plan.done) }
+                                    Row {
+                                        Checkbox(
+                                            checked = isCheck.value,
+                                            onCheckedChange = {
+                                                isCheck.value = it
+                                                plan.done = it
+                                                viewModel.onCheckDayPlan(plan, i)
+                                            },
+                                            modifier = Modifier
+                                                .padding(end = 12.dp)
+                                                .align(Alignment.CenterVertically)
+                                        )
+
+                                        Text(
+                                            text = "${plan.newPlan}",
+                                            style = MaterialTheme.typography.h6,
+                                            modifier = Modifier.padding(end = 8.dp)
+                                        )
+                                    }
+
+
+                                }
+                            }
                         }
 
                     }

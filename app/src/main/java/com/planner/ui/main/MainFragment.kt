@@ -5,10 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Today
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
@@ -39,50 +46,96 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-
         return ComposeView(requireContext()).apply {
             setContent {
                 PlannerTheme {
+                    viewModel.getToday()
 
-                    LazyRow() {
-                        itemsIndexed(
-                            items = viewModel.weeksList.value
-                        ) { i, item ->
-                            viewModel.onChangeWeeksScrollPosition(i)
-                            Log.d(TAG, "WeeksScrollPosition $i")
-                            if ((i + 1) >= viewModel.counter) {
-                                viewModel.nextWeek()
-                            }
-                            LazyColumn(modifier = Modifier.width(365.dp)) {
-                                itemsIndexed(
-                                    items = item
-                                ) { index, dayPlans ->
-                                    MainDayCard(
-                                        month = dayPlans.getMonthName(),
-                                        dayOfWeek = dayPlans.getDayOfWeekName(),
-                                        day = dayPlans.day,
-                                        numberOfDonePlans = 0,
-                                        numberOfPlans = 7,
-                                        isToday = dayPlans.isSameDay(viewModel.today),
-                                        onClick = {
-                                            val bundle = bundleOf(
-                                                Pair("year", dayPlans.year),
-                                                Pair("month", dayPlans.month),
-                                                Pair("monthName", dayPlans.getMonthName()),
-                                                Pair("dayOfWeek", dayPlans.dayOfWeek),
-                                                Pair("day", dayPlans.day)
-                                            )
-                                            findNavController().navigate(
-                                                R.id.action_mainFragment_to_dayInformationFragment,
-                                                bundle
-                                            )
-                                        })
-
+                    Column() {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            elevation = 8.dp
+                        ) {
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                IconButton(
+                                    onClick = {
+                                        viewModel.getPreviousWeek()
+                                    },
+                                    modifier = Modifier
+                                        .wrapContentWidth(Alignment.Start)
+                                        .align(Alignment.CenterVertically)
+                                ) {
+                                    Icon(
+                                        Icons.Filled.ArrowBack,
+                                        contentDescription = "Arrow Back Icon"
+                                    )
                                 }
 
+                                IconButton(
+                                    onClick = {
+                                        viewModel.getThisWeek()
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .wrapContentWidth(Alignment.CenterHorizontally)
+                                        .align(Alignment.CenterVertically)
+                                ) {
+                                    Icon(Icons.Filled.Today, contentDescription = "Today Icon")
+                                }
+
+                                IconButton(
+                                    onClick = {
+                                        viewModel.getNextWeek()
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentWidth(Alignment.End)
+                                        .align(Alignment.CenterVertically)
+                                ) {
+                                    Icon(
+                                        Icons.Filled.ArrowForward,
+                                        contentDescription = "Arrow Forward Icon"
+                                    )
+                                }
+
+
                             }
+
                         }
+
+                        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                            itemsIndexed(
+                                items = viewModel.week.value
+                            ) { index, dayPlan ->
+                                Log.d(TAG, "numberOfPlans - ${dayPlan.countPlans()}")
+                                MainDayCard(
+                                    month = dayPlan.getMonthName(),
+                                    dayOfWeek = dayPlan.getDayOfWeekName(),
+                                    day = dayPlan.day,
+                                    numberOfDonePlans = dayPlan.countDonePlans(),
+                                    numberOfPlans = dayPlan.countPlans(),
+                                    isToday = dayPlan.isSameDay(viewModel.today),
+                                    onClick = {
+                                        val bundle = bundleOf(
+                                            Pair("year", dayPlan.year),
+                                            Pair("month", dayPlan.month),
+                                            Pair("monthName", dayPlan.getMonthName()),
+                                            Pair("dayOfWeek", dayPlan.dayOfWeek),
+                                            Pair("day", dayPlan.day)
+                                        )
+                                        findNavController().navigate(
+                                            R.id.action_mainFragment_to_dayInformationFragment,
+                                            bundle
+                                        )
+                                    })
+
+                            }
+
+                        }
+
+
                     }
+
 
                 }
 
@@ -91,3 +144,4 @@ class MainFragment : Fragment() {
     }
 
 }
+

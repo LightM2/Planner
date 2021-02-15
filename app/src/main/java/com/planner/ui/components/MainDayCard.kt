@@ -1,5 +1,6 @@
 package com.planner.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -64,15 +65,17 @@ fun MainDayCard(
                 )
 
             }
-            Text(
-                text = "$numberOfDonePlans/$numberOfPlans",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 6.dp)
-                    .wrapContentWidth(Alignment.End)
-                    .align(Alignment.CenterVertically),
-                style = MaterialTheme.typography.h4
-            )
+            if (numberOfPlans != 0){
+                Text(
+                    text = "$numberOfDonePlans/$numberOfPlans",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 6.dp)
+                        .wrapContentWidth(Alignment.End)
+                        .align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.h4
+                )
+            }
         }
     }
 }

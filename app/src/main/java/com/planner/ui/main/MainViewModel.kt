@@ -18,7 +18,7 @@ import javax.inject.Inject
 class MainViewModel
 @Inject
 constructor(
-    private val dayPlansRepository: PlansRepository,
+    private val mainRepository: PlansRepository,
     private val state: SavedStateHandle,
 ) : ViewModel() {
 
@@ -32,50 +32,45 @@ constructor(
     private var day: Int = 0
 
     lateinit var today: DayPlans
-    var counter = 0
 
     var currentDayPlans: DayPlans = DayPlans(0, 0, 0, 0)
 
-    val weeksList: MutableState<List<List<DayPlans>>> = mutableStateOf(listOf())
-    val loading: MutableState<Boolean> = mutableStateOf(false)
+    val week: MutableState<List<DayPlans>> = mutableStateOf(listOf())
 
-    private var weeksListScrollPosition = 0
+    private val loading: MutableState<Boolean> = mutableStateOf(false)
 
 
-    init {
-        getToday()
-    }
-
-    fun onChangeWeeksScrollPosition(position: Int) {
-        weeksListScrollPosition = position
-    }
-
-    private fun appendWeeksList(weekList: List<DayPlans>) {
-        val current = ArrayList(weeksList.value)
-        //current.remove(current[0])
-        current.add(weekList)
-        weeksList.value = current
-
-    }
-
-    fun nextWeek() {
+    fun getPreviousWeek() {
         viewModelScope.launch {
             loading.value = true
-            if ((weeksListScrollPosition + 1) >= counter) {
-                val result = currentDayPlans.getNextWeekList()
-                currentDayPlans = currentDayPlans.getSomeDay(7)
-                counter++
-                appendWeeksList(result)
-                onChangeWeeksScrollPosition(0)
-            }
+            updateWeekIfDBContainsCurrentDays(currentDayPlans.getPreviousWeekList())
+            currentDayPlans = currentDayPlans.getSomeDay(-7)
             loading.value = false
         }
     }
 
-    private fun getToday() {
+    fun getThisWeek() {
+        viewModelScope.launch {
+            loading.value = true
+            updateWeekIfDBContainsCurrentDays(today.getThisWeekList())
+            currentDayPlans = today
+            loading.value = false
+        }
+    }
+
+
+    fun getNextWeek() {
+        viewModelScope.launch {
+            loading.value = true
+            updateWeekIfDBContainsCurrentDays(currentDayPlans.getNextWeekList())
+            currentDayPlans = currentDayPlans.getSomeDay(7)
+            loading.value = false
+        }
+    }
+
+    fun getToday() {
         viewModelScope.launch {
             val rightNow = Calendar.getInstance()
-            Log.d(TAG, "rightNow - ${rightNow.time}")
 
             year = rightNow.get(Calendar.YEAR)
             month = rightNow.get(Calendar.MONTH)
@@ -84,13 +79,8 @@ constructor(
             monthName = DateFormatSymbols().months[month]
             dayOfWeekName = DateFormatSymbols().weekdays[dayOfWeek]
 
-            currentDayPlans = DayPlans(year, month, dayOfWeek, day)
             today = DayPlans(year, month, dayOfWeek, day)
-            counter++
-
-            weeksList.value = listOf(
-                currentDayPlans.getThisWeekList(),
-            )
+            getThisWeek()
 
             Log.d(
                 TAG, "year - $year, month - $monthName, day of week - $dayOfWeekName, day - $day"
@@ -98,5 +88,20 @@ constructor(
         }
 
     }
+
+    private fun updateWeekIfDBContainsCurrentDays(someWeek: MutableList<DayPlans>) {
+        viewModelScope.launch {
+            someWeek.forEach { dayPlans ->
+                mainRepository.getSpecialDayPlansFromDB(
+                    yearSecond = dayPlans.year,
+                    monthSecond = dayPlans.month,
+                    daySecond = dayPlans.day
+                )?.let { dayPlans.updateDayPlan(it[0]) }
+            }
+            week.value = someWeek
+        }
+
+    }
+
 
 }
