@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
-import androidx.compose.material.icons.filled.AddTask
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,6 +23,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.planner.R
 import com.planner.ui.BaseApplication
+import com.planner.ui.components.DayPlanRow
 import com.planner.ui.theme.PlannerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -77,7 +77,6 @@ class DayInformationFragment : Fragment() {
                                 text = "${viewModel.day}",
                                 style = MaterialTheme.typography.h4
                             )
-
                             IconButton(
                                 onClick = {
                                     val bundle = bundleOf(
@@ -107,32 +106,29 @@ class DayInformationFragment : Fragment() {
                         }
                         viewModel.getDayPlansList()
 
+
                         if (viewModel.dayPlansLastIsNotEmpty.value) {
                             LazyColumn() {
                                 itemsIndexed(
                                     items = viewModel.planList.value
                                 ) { i, plan ->
-                                    val isCheck = remember { mutableStateOf(plan.done) }
-                                    Row {
-                                        Checkbox(
-                                            checked = isCheck.value,
-                                            onCheckedChange = {
-                                                isCheck.value = it
-                                                plan.done = it
-                                                viewModel.onCheckDayPlan(plan, i)
-                                            },
-                                            modifier = Modifier
-                                                .padding(end = 12.dp)
-                                                .align(Alignment.CenterVertically)
-                                        )
-
-                                        Text(
-                                            text = "${plan.newPlan}",
-                                            style = MaterialTheme.typography.h6,
-                                            modifier = Modifier.padding(end = 8.dp)
-                                        )
-                                    }
-
+                                    DayPlanRow(
+                                        onClick = {
+                                            Log.d(TAG, "onClick")
+                                            val bundle = bundleOf(
+                                                Pair("id", viewModel.dayPlans.id),
+                                                Pair("planIndex", i),
+                                            )
+                                            findNavController().navigate(
+                                                R.id.action_dayInformationFragment_to_editingFragment,
+                                                bundle
+                                            )},
+                                        onLongClick = {
+                                            Log.d(TAG, "long click")
+                                        },
+                                        plan = plan,
+                                        onCheckDayPlan = { viewModel.onCheckDayPlan(plan, i) }
+                                    )
 
                                 }
                             }

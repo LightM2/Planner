@@ -19,6 +19,9 @@ interface DayPlansDao {
         daySecond: Int
     ): List<DayPlansEntity>
 
+    @Query("SELECT * FROM dayPlansTN WHERE id = :id")
+    suspend fun getDayPlansUsingID(id: Int): DayPlansEntity
+
     @Update
     suspend fun updateDayPlans(dayPlansEntity: DayPlansEntity)
 

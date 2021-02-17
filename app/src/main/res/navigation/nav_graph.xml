@@ -19,9 +19,16 @@
         <action
             android:id="@+id/action_dayInformationFragment_to_addNewPlanFragment"
             app:destination="@id/addNewPlanFragment" />
+        <action
+            android:id="@+id/action_dayInformationFragment_to_editingFragment"
+            app:destination="@id/editingFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNewPlanFragment"
         android:name="com.planner.ui.addNewPlan.AddNewPlanFragment"
         android:label="AddNewPlanFragment" />
+    <fragment
+        android:id="@+id/editingFragment"
+        android:name="com.planner.ui.editing.EditingFragment"
+        android:label="EditingFragment" />
 </navigation>

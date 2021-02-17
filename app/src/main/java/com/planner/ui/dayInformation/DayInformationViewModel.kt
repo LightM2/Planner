@@ -25,7 +25,9 @@ constructor(
     var dayPlansLastIsNotEmpty = mutableStateOf(false)
 
     private var dayPlansList: List<DayPlans>? = null
+    lateinit var dayPlans: DayPlans
     var planList: MutableState<List<Plan>> = mutableStateOf(listOf())
+
 
     var year: Int = 0
     var month: Int = 0
@@ -40,6 +42,7 @@ constructor(
                 daySecond = day
             )
             if (!dayPlansList.isNullOrEmpty()){
+                dayPlans = dayPlansList!![0]
                 dayPlansList!![0].plans ?.let {
                     planList.value = it
                     dayPlansLastIsNotEmpty.value = planList.value.isNotEmpty()
@@ -56,5 +59,7 @@ constructor(
             Log.d(TAG, "onCheckDayPlan done")
         }
     }
+
+
 
 }

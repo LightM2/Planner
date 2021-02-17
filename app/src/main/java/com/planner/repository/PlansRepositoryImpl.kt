@@ -73,6 +73,19 @@ class PlansRepositoryImpl(
         }
     }
 
+    override suspend fun deleteSpecialPlanInSpecialDay(dayPlans: DayPlans, plan: Plan) {
+        try {
+            if (!dayPlans.plans.isNullOrEmpty()){
+                dayPlans.plans!!.remove(plan)
+                updateDayPlansInDB(dayPlans)
+                Log.d(TAG, "deleteSpecialPlanInSpecialDay Success")
+            }
+
+        } catch (e: Exception) {
+            Log.d(TAG, "deleteSpecialPlanInSpecialDay Exception $e")
+        }
+    }
+
     override suspend fun getSpecialDayPlansFromDB(
         yearSecond: Int,
         monthSecond: Int,
@@ -94,6 +107,18 @@ class PlansRepositoryImpl(
 
         } catch (e: Exception) {
             Log.d(TAG, "getSpecialDayPlansFromDB Exception $e")
+        }
+        return result
+    }
+
+    override suspend fun getDayPlansUsingIDFromDB(id: Int): DayPlans? {
+        var result: DayPlans? = null
+        try {
+            result = dayPlansMapperEntity.mapToDomainModel(dayPlansDao.getDayPlansUsingID(id))
+            Log.d(TAG, "getDayPlansUsingIDFromDB Success")
+
+        } catch (e: Exception) {
+            Log.d(TAG, "getDayPlansUsingIDFromDB Exception $e")
         }
         return result
     }

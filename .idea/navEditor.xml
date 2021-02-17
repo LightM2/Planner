@@ -14,7 +14,7 @@
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="66" />
-                            <option name="y" value="28" />
+                            <option name="y" value="-134" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -36,7 +36,24 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_dayInformationFragment_to_editingFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="editingFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="69" />
+                            <option name="y" value="181" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
