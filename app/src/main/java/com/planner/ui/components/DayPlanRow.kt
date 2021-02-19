@@ -5,6 +5,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Checkbox
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -28,6 +29,11 @@ fun DayPlanRow(
     val isCheck = remember { mutableStateOf(plan.done) }
     Row(
         modifier = Modifier
+            .padding(
+                start = 12.dp,
+                top = 12.dp,
+                end = 6.dp,
+            )
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick
@@ -48,9 +54,13 @@ fun DayPlanRow(
 
         Text(
             text = "${plan.newPlan}",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier
+                .padding(end = 8.dp),
+            color = MaterialTheme.colors.onPrimary,
+            style = MaterialTheme.typography.h5
+
         )
+
 
     }
 }

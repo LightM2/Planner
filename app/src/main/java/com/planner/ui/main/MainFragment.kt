@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -26,11 +27,13 @@ import androidx.navigation.findNavController
 import com.planner.R
 import com.planner.ui.BaseApplication
 import com.planner.ui.components.MainDayCard
+import com.planner.ui.components.MainToolbar
 import com.planner.ui.theme.PlannerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
+@ExperimentalMaterialApi
 class MainFragment : Fragment() {
 
     @Inject
@@ -52,56 +55,11 @@ class MainFragment : Fragment() {
                     viewModel.getToday()
 
                     Column() {
-                        Surface(
-                            modifier = Modifier.fillMaxWidth(),
-                            elevation = 8.dp
-                        ) {
-                            Row(modifier = Modifier.fillMaxWidth()) {
-                                IconButton(
-                                    onClick = {
-                                        viewModel.getPreviousWeek()
-                                    },
-                                    modifier = Modifier
-                                        .wrapContentWidth(Alignment.Start)
-                                        .align(Alignment.CenterVertically)
-                                ) {
-                                    Icon(
-                                        Icons.Filled.ArrowBack,
-                                        contentDescription = "Arrow Back Icon"
-                                    )
-                                }
-
-                                IconButton(
-                                    onClick = {
-                                        viewModel.getThisWeek()
-                                    },
-                                    modifier = Modifier
-                                        .fillMaxWidth(0.85f)
-                                        .wrapContentWidth(Alignment.CenterHorizontally)
-                                        .align(Alignment.CenterVertically)
-                                ) {
-                                    Icon(Icons.Filled.Today, contentDescription = "Today Icon")
-                                }
-
-                                IconButton(
-                                    onClick = {
-                                        viewModel.getNextWeek()
-                                    },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .wrapContentWidth(Alignment.End)
-                                        .align(Alignment.CenterVertically)
-                                ) {
-                                    Icon(
-                                        Icons.Filled.ArrowForward,
-                                        contentDescription = "Arrow Forward Icon"
-                                    )
-                                }
-
-
-                            }
-
-                        }
+                        MainToolbar(
+                            getPreviousWeek = viewModel::getPreviousWeek,
+                            getThisWeek = viewModel::getThisWeek,
+                            getNextWeek = viewModel::getNextWeek
+                        )
 
                         LazyColumn(modifier = Modifier.fillMaxWidth()) {
                             itemsIndexed(
@@ -142,6 +100,8 @@ class MainFragment : Fragment() {
             }
         }
     }
+
+
 
 }
 

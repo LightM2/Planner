@@ -19,11 +19,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.planner.ui.BaseApplication
+import com.planner.ui.components.AddNewPlanToolbar
 import com.planner.ui.theme.PlannerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
+@ExperimentalMaterialApi
 class AddNewPlanFragment : Fragment() {
 
     @Inject
@@ -50,42 +52,24 @@ class AddNewPlanFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 PlannerTheme {
-                    Column(
-                        modifier = Modifier.padding(
-                            start = 12.dp,
-                            top = 6.dp,
-                            end = 6.dp,
-                            bottom = 6.dp
+                    Column{
+
+                        AddNewPlanToolbar(
+                            navigateToPreviousFragment = { findNavController().popBackStack() },
+                            setNewPlans = viewModel::setNewPlans
                         )
-                    ) {
-                        Row {
-                            IconButton(
-                                onClick = { findNavController().popBackStack() },
-                                modifier = Modifier
-                                    .align(Alignment.CenterVertically)
-                            ) {
-                                Icon(Icons.Filled.Close, contentDescription = "Close Icon")
-                            }
-
-                            IconButton(
-                                onClick = {
-                                    viewModel.setNewPlans()
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentWidth(Alignment.End)
-                                    .align(Alignment.CenterVertically)
-                            ) {
-
-                                Icon(Icons.Filled.Save, contentDescription = "Save Icon")
-                            }
-
-                        }
 
                         TextField(
                             value = viewModel.newPlan.value,
                             onValueChange = { viewModel.onTextChanged(it) },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = 12.dp,
+                                    top = 6.dp,
+                                    end = 6.dp,
+                                    bottom = 6.dp
+                                ),
                             textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
                             label = {
                                 Text(text = "New Plan")

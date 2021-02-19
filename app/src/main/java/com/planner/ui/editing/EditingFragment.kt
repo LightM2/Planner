@@ -28,13 +28,15 @@ import androidx.navigation.findNavController
 import com.planner.R
 import com.planner.ui.BaseApplication
 import com.planner.ui.components.DayPlanRow
+import com.planner.ui.components.EditingToolbar
 import com.planner.ui.dayInformation.DayInformationViewModel
 import com.planner.ui.theme.PlannerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EditingFragment: Fragment() {
+@ExperimentalMaterialApi
+class EditingFragment : Fragment() {
     @Inject
     lateinit var application: BaseApplication
 
@@ -56,42 +58,13 @@ class EditingFragment: Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 PlannerTheme {
-                    Column{
-                        Row() {
-                            IconButton(
-                                onClick = { findNavController().popBackStack() },
-                                modifier = Modifier
-                                    .align(Alignment.CenterVertically)
-                            ) {
-                                Icon(Icons.Filled.Close, contentDescription = "Close Icon")
-                            }
+                    Column {
 
-                            IconButton(
-                                onClick = {
-                                    viewModel.deletePlan()
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth(0.85f)
-                                    .wrapContentWidth(Alignment.End)
-                                    .align(Alignment.CenterVertically)
-                            ) {
-
-                                Icon(Icons.Filled.Delete, contentDescription = "Delete Icon")
-                            }
-                            IconButton(
-                                onClick = {
-                                    viewModel.saveUpdatedPlan()
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentWidth(Alignment.End)
-                                    .align(Alignment.CenterVertically)
-                            ) {
-
-                                Icon(Icons.Filled.Save, contentDescription = "Save Icon")
-                            }
-
-                        }
+                        EditingToolbar(
+                            navigateToPreviousFragment = { findNavController().popBackStack() },
+                            deletePlan = viewModel::deletePlan,
+                            saveUpdatedPlan = viewModel::saveUpdatedPlan
+                        )
 
                         TextField(
                             value = viewModel.planString.value,
@@ -101,7 +74,7 @@ class EditingFragment: Fragment() {
                             label = {
                                 Text(text = "Plan")
                             },
-                            backgroundColor = MaterialTheme.colors.surface
+                            backgroundColor = MaterialTheme.colors.surface,
                         )
 
 
@@ -110,7 +83,7 @@ class EditingFragment: Fragment() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentWidth(Alignment.End)
-                                .padding(top = 12.dp, end = 6.dp)
+                                .padding(top = 12.dp, end = 6.dp),
                         ) {
                             viewModel.setButtonText()
                             Text(

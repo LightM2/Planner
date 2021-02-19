@@ -2,15 +2,24 @@ package com.planner.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val purple200 = Color(0xFFBB86FC)
-val purple500 = Color(0xFF6200EE)
-val purple700 = Color(0xFF3700B3)
-val teal200 = Color(0xFF03DAC5)
-val primaryColor = Color(0xffecb3)
-val primaryLightColor = Color(0xffffe5)
-val primaryDarkColor = Color(0xcbba83)
-val secondaryColor = Color(0xffb74d)
-val secondaryLightColor = Color(0xffe97d)
-val secondaryDarkColor = Color(0xc88719)
-val primaryTextColor = Color(0x424242)
-val secondaryTextColor = Color(0xfafafa)
+val Teal50 = Color(0xFFd4f6f2)
+val Teal100 = Color(0xFF92e9dc)
+val Teal200 = Color(0xFF03dac4)
+val Teal300 = Color(0xFF00c7ab)
+val Teal400 = Color(0xFF00b798)
+val Teal500 = Color(0xFF00a885)
+val Teal600 = Color(0xFF009a77)
+val Teal700 = Color(0xFF065a43)//008966)
+val Teal900 = Color(0xFF002115)//00311F)//005b3a)
+
+val Blue400 = Color(0xFF42A5F5)
+val Blue600 = Color(0xFF1E88E5)
+val Blue700 = Color(0xFF1976D2)
+
+val Grey1 = Color(0xFFF2F2F2)
+
+val Black1 = Color(0xFF111111)
+val Black2 = Color(0xFF000000)
+
+val RedErrorDark = Color(0xFFB00020)
+val RedErrorLight = Color(0xFFEF5350)

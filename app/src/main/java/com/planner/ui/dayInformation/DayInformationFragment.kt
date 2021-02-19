@@ -21,13 +21,17 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.planner.R
 import com.planner.ui.BaseApplication
+import com.planner.ui.components.DayInformationToolbar
 import com.planner.ui.components.DayPlanRow
 import com.planner.ui.theme.PlannerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class DayInformationFragment : Fragment() {
     @Inject
@@ -53,62 +57,35 @@ class DayInformationFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-                PlannerTheme {
-                    Column(
-                        modifier = Modifier.padding(
-                            start = 12.dp,
-                            top = 6.dp,
-                            end = 6.dp,
-                            bottom = 6.dp
-                        )
-                    ) {
-                        Row {
-                            Text(
-                                text = "$monthName",
-                                style = MaterialTheme.typography.h4,
-                                modifier = Modifier
-                                    .align(Alignment.CenterVertically)
-                                    .padding(end = 8.dp)
-                            )
+                PlannerTheme() {
+                    Column {
 
-                            Text(
-                                modifier = Modifier
-                                    .align(Alignment.CenterVertically),
-                                text = "${viewModel.day}",
-                                style = MaterialTheme.typography.h4
-                            )
-                            IconButton(
-                                onClick = {
-                                    val bundle = bundleOf(
-                                        Pair("year", viewModel.year),
-                                        Pair("month", viewModel.month),
-                                        Pair("dayOfWeek", viewModel.dayOfWeek),
-                                        Pair("day", viewModel.day)
-                                    )
-                                    findNavController().navigate(
-                                        R.id.action_dayInformationFragment_to_addNewPlanFragment,
-                                        bundle
-                                    )
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(end = 8.dp)
-                                    .wrapContentWidth(Alignment.End)
-                                    .align(Alignment.CenterVertically),
-
-                                ) {
-                                Icon(
-                                    imageVector = Icons.Filled.AddCircleOutline,
-                                    contentDescription = "Add Task Icon"
+                        DayInformationToolbar(
+                            monthName = monthName.toString(),
+                            day = viewModel.day,
+                            navigateToPreviousFragment = { findNavController().popBackStack() },
+                            navigateToNextFragment = {
+                                val bundle = bundleOf(
+                                    Pair("year", viewModel.year),
+                                    Pair("month", viewModel.month),
+                                    Pair("dayOfWeek", viewModel.dayOfWeek),
+                                    Pair("day", viewModel.day)
                                 )
-                            }
 
-                        }
+                                findNavController().navigate(
+                                    R.id.action_dayInformationFragment_to_addNewPlanFragment,
+                                    bundle
+                                )
+                            })
+
+
+
                         viewModel.getDayPlansList()
 
 
+
                         if (viewModel.dayPlansLastIsNotEmpty.value) {
-                            LazyColumn() {
+                            LazyColumn {
                                 itemsIndexed(
                                     items = viewModel.planList.value
                                 ) { i, plan ->
@@ -122,7 +99,8 @@ class DayInformationFragment : Fragment() {
                                             findNavController().navigate(
                                                 R.id.action_dayInformationFragment_to_editingFragment,
                                                 bundle
-                                            )},
+                                            )
+                                        },
                                         onLongClick = {
                                             Log.d(TAG, "long click")
                                         },
@@ -139,8 +117,8 @@ class DayInformationFragment : Fragment() {
 
                 }
 
+
             }
         }
     }
-
 }
