@@ -26,7 +26,7 @@ fun DayPlanRow(
     plan: Plan,
     onCheckDayPlan: () -> Unit
 ) {
-    val isCheck = remember { mutableStateOf(plan.done) }
+    val isCheck = mutableStateOf(plan.done)
     Row(
         modifier = Modifier
             .padding(

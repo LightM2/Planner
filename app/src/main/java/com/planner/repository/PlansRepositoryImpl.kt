@@ -76,8 +76,13 @@ class PlansRepositoryImpl(
     override suspend fun deleteSpecialPlanInSpecialDay(dayPlans: DayPlans, plan: Plan) {
         try {
             if (!dayPlans.plans.isNullOrEmpty()){
-                dayPlans.plans!!.remove(plan)
-                updateDayPlansInDB(dayPlans)
+                if (dayPlans.plans!!.size == 1){
+                    deleteDayPlansFromDB(dayPlans)
+                }else {
+                    dayPlans.plans!!.remove(plan)
+                    updateDayPlansInDB(dayPlans)
+                }
+
                 Log.d(TAG, "deleteSpecialPlanInSpecialDay Success")
             }
 

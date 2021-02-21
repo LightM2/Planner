@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -56,7 +57,8 @@ class AddNewPlanFragment : Fragment() {
 
                         AddNewPlanToolbar(
                             navigateToPreviousFragment = { findNavController().popBackStack() },
-                            setNewPlans = viewModel::setNewPlans
+                            setNewPlans = viewModel::setNewPlans,
+                            showToast = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
                         )
 
                         TextField(

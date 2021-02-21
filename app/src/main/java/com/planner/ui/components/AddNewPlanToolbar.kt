@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 fun AddNewPlanToolbar(
     navigateToPreviousFragment: () -> Unit,
     setNewPlans: () -> Unit,
+    showToast: (text: String) -> Unit
 ){
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -35,13 +36,13 @@ fun AddNewPlanToolbar(
             IconButton(
                 onClick = {
                     setNewPlans()
+                    showToast("Saved")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.End)
                     .align(Alignment.CenterVertically)
             ) {
-
                 Icon(Icons.Filled.Save, contentDescription = "Save Icon")
             }
 

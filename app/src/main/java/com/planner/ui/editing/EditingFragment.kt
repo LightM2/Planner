@@ -1,41 +1,29 @@
 package com.planner.ui.editing
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircleOutline
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Save
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.planner.R
 import com.planner.ui.BaseApplication
-import com.planner.ui.components.DayPlanRow
 import com.planner.ui.components.EditingToolbar
-import com.planner.ui.dayInformation.DayInformationViewModel
 import com.planner.ui.theme.PlannerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 class EditingFragment : Fragment() {
     @Inject
     lateinit var application: BaseApplication
@@ -60,10 +48,15 @@ class EditingFragment : Fragment() {
                 PlannerTheme {
                     Column {
 
+                        if (viewModel.isPlanDeleted.value) {
+                            findNavController().popBackStack()
+                        }
+
                         EditingToolbar(
                             navigateToPreviousFragment = { findNavController().popBackStack() },
                             deletePlan = viewModel::deletePlan,
-                            saveUpdatedPlan = viewModel::saveUpdatedPlan
+                            saveUpdatedPlan = viewModel::saveUpdatedPlan,
+                            showToast = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
                         )
 
                         TextField(
@@ -79,7 +72,9 @@ class EditingFragment : Fragment() {
 
 
                         Button(
-                            onClick = { viewModel.changePlanState() },
+                            onClick = {
+                                viewModel.changePlanState()
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentWidth(Alignment.End)
